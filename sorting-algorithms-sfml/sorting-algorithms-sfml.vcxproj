@@ -154,10 +154,12 @@
     <ClCompile Include="merge.cpp" />
     <ClCompile Include="quick.cpp" />
     <ClCompile Include="shell.cpp" />
+    <ClCompile Include="visualisation.cpp" />
     <ClCompile Include="wyswietlanie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sortowania.h" />
+    <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

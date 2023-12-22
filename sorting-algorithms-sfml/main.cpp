@@ -1,18 +1,19 @@
-#include "sortowania.h"
+//#include "sortowania.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <cstdlib>
 #include <thread>
 #include <iostream>
-int szerokosc = 1000, wysokosc = 100;
+#include "visualisation.h"
+/*int szerokosc = 1000, wysokosc = 100;
 bool close = false, start;
 std::vector<std::pair<int, int>> kolory(7, { 0, 0 });
 std::vector<std::pair<int, int>> konfiguracja(7, { 0, 0 });
 std::vector<std::thread> watki(7);
-float szerokosc_rect;
+float szerokosc_rect;*/
 int main()
 {
-    typedef void(*FunctionPointer)(std::vector<int>);
+    /*typedef void(*FunctionPointer)(std::vector<int>);
     FunctionPointer funkcje[] = {bubblesort, insertion, quicksort_in, heapsort_in, Shellsort, mergesort_in, combsort};
     srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
     std::string komenda;
@@ -69,5 +70,15 @@ int main()
                 watki[i].join();
         close = false;
     }
-    return 0;
+    return 0;*/
+    int n;
+    std::cin >> n;
+    visualisation a(n), b(n);
+
+    std::thread thread1(&visualisation::comb_sort, &a);
+    std::thread thread2(&visualisation::shell_sort, &b);
+
+    // Czekaj na zakoñczenie w¹tków
+    thread1.join();
+    thread2.join();
 }

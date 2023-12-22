@@ -1,0 +1,15 @@
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+/build
+/bin
+/libs
+*.user
+*.suo
+*.userprefs
+/.vs
+/.idea
+SFML-2.5.1/
+x64/
