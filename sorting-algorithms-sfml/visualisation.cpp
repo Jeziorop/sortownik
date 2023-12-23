@@ -182,8 +182,8 @@ void visualisation::draw()
 	}
 	sf::Text counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), counter_font, 15);
 	counter.setFillColor(sf::Color::White);
-	counter.setPosition(sf::Vector2f(0.f, 0.f));
 	counter.setOutlineThickness(1.f);
+	counter.setScale(sf::Vector2f(float(window_width) / window.getSize().x, float(window_height) / window.getSize().y));//prevent squeezing
 	window.draw(counter);
 	window.display();
 }
@@ -261,6 +261,8 @@ void visualisation::bogo_sort()
 		{
 			std::random_shuffle(values.begin(), values.end());
 			finished = std::is_sorted(values.begin(), values.end());
+			assign_operation_count += values.size();
+			comparision_operation_count += values.size() - 1;
 		}
 		draw();
 		//if (finished)//close)

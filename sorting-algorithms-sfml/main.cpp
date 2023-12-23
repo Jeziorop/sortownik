@@ -72,8 +72,8 @@ int main()
     return 0;*/
     int n;
     std::cin >> n;
-    visualisation a(n), b(n), c(n), d(n), e(n), f(n);
+    visualisation a(n);
 
-    std::thread thread1(&visualisation::shell_sort, &a);
+    std::thread thread1(&visualisation::bogo_sort, &a);
     thread1.join();
 }

@@ -5,10 +5,10 @@
 class visualisation
 {
 private:
-	static std::mt19937 generator;
+	std::mt19937 generator;
 	static const int window_width = 1000;
 	static const int window_height = 100;
-	static sf::Font counter_font;
+	sf::Font counter_font;
 	std::vector<int> values;
 	sf::Vector2i colors;
 	sf::Vector2i variants;
