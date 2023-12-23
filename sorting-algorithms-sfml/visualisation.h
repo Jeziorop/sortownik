@@ -5,14 +5,16 @@
 class visualisation
 {
 private:
-	std::mt19937 generator;
+	static std::mt19937 generator;
 	static const int window_width = 1000;
 	static const int window_height = 100;
+	static sf::Font counter_font;
 	std::vector<int> values;
 	sf::Vector2i colors;
 	sf::Vector2i variants;
 	sf::RenderWindow window;
-
+	long long assign_operation_count;
+	long long comparision_operation_count;
 public:
 	visualisation(std::vector<int>& values);
 	visualisation(int size);

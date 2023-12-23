@@ -1,2 +1,0 @@
-# sorting-algorithms-visualisation
- 

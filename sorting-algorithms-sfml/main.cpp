@@ -1,10 +1,9 @@
 //#include "sortowania.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <cstdlib>
-#include <thread>
 #include <iostream>
 #include "visualisation.h"
+#include <thread>
 /*int szerokosc = 1000, wysokosc = 100;
 bool close = false, start;
 std::vector<std::pair<int, int>> kolory(7, { 0, 0 });
@@ -73,12 +72,8 @@ int main()
     return 0;*/
     int n;
     std::cin >> n;
-    visualisation a(n), b(n);
+    visualisation a(n), b(n), c(n), d(n), e(n), f(n);
 
-    std::thread thread1(&visualisation::comb_sort, &a);
-    std::thread thread2(&visualisation::shell_sort, &b);
-
-    // Czekaj na zakoñczenie w¹tków
+    std::thread thread1(&visualisation::shell_sort, &a);
     thread1.join();
-    thread2.join();
 }

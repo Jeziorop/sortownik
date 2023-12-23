@@ -146,20 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bubble.cpp" />
-    <ClCompile Include="comb.cpp" />
-    <ClCompile Include="heap.cpp" />
-    <ClCompile Include="insertion.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="merge.cpp" />
-    <ClCompile Include="quick.cpp" />
-    <ClCompile Include="shell.cpp" />
     <ClCompile Include="visualisation.cpp" />
-    <ClCompile Include="wyswietlanie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sortowania.h" />
     <ClInclude Include="visualisation.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="src\Arial.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

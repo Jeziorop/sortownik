@@ -1,5 +1,6 @@
 #include "visualisation.h"
 #include <algorithm>
+#include <string>
 visualisation::visualisation(std::vector<int> &values)
 {
 	std::random_device rd;
@@ -9,6 +10,9 @@ visualisation::visualisation(std::vector<int> &values)
 	colors.y = rand_int(0, 255);
 	variants.x = rand_int(0, 2);
 	variants.y = rand_int(0, 1);
+	assign_operation_count = 0;
+	comparision_operation_count = 0;
+	counter_font.loadFromFile("res\\Arial.ttf");
 }
 visualisation::visualisation(int size)
 {
@@ -21,6 +25,9 @@ visualisation::visualisation(int size)
 	colors.y = rand_int(0, 255);
 	variants.x = rand_int(0, 2);
 	variants.y = rand_int(0, 1);
+	assign_operation_count = 0;
+	comparision_operation_count = 0;
+	counter_font.loadFromFile("res\\Arial.ttf");
 }
 void visualisation::bubble_sort()
 {
@@ -39,14 +46,19 @@ void visualisation::bubble_sort()
 		{
 			for (int i = 0; i < values.size(); i++)
 				for (int j = 1; j < values.size() - i; j++)
-					if (values[j - 1] > values[j]) {
+				{
+					if (values[j - 1] > values[j])
+					{
+						assign_operation_count += 2;
 						std::swap(values[j], values[j - 1]);
-						draw();
-						sf::Event e;
-						while (window.pollEvent(e))
-							if (e.type == sf::Event::Resized)
-								break;
 					}
+					comparision_operation_count++;
+					sf::Event e;
+					while (window.pollEvent(e))
+						if (e.type == sf::Event::Resized)
+							break;
+					draw();
+				}
 			finished = true;
 		}
 		else
@@ -79,9 +91,12 @@ void visualisation::insertion_sort()
 					while (window.pollEvent(e))
 						if (e.type == sf::Event::Resized)
 							break;
+					comparision_operation_count++;
+					assign_operation_count++;
 					draw();
 				}
 				values[j + 1] = key;
+				assign_operation_count++;
 				draw();
 			}
 			finished = true;
@@ -140,11 +155,14 @@ int visualisation::partition(int low, int high)
 		{
 			i++;
 			std::swap(values[i], values[j]);
-			draw();
+			assign_operation_count += 2;
 		}
+		comparision_operation_count++;
+		draw();
 	}
 
 	std::swap(values[i + 1], values[high]);
+	assign_operation_count += 2;
 	draw();
 
 	return i + 1;
@@ -162,6 +180,11 @@ void visualisation::draw()
 		temp_rect.setPosition(sf::Vector2f((i + 1) * rect_width, window_height));
 		window.draw(temp_rect);
 	}
+	sf::Text counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), counter_font, 15);
+	counter.setFillColor(sf::Color::White);
+	counter.setPosition(sf::Vector2f(0.f, 0.f));
+	counter.setOutlineThickness(1.f);
+	window.draw(counter);
 	window.display();
 }
 void visualisation::heap_sort()
@@ -183,6 +206,7 @@ void visualisation::heap_sort()
 				heapify(values.size(), i);
 			for (int i = values.size() - 1; i > 0; i--) {
 				std::swap(values[0], values[i]);
+				assign_operation_count += 2;
 				draw();
 				heapify(i, 0);
 			}
@@ -199,9 +223,11 @@ void visualisation::heapify(int n, int i)
 	int r = 2 * i + 2;
 	if (l < n && values[l] > values[largest])
 		largest = l;
+	comparision_operation_count++;
 	draw();
 	if (r < n && values[r] > values[largest])
 		largest = r;
+	comparision_operation_count++;
 	draw();
 	sf::Event t;
 	while (window.pollEvent(t))
@@ -213,6 +239,7 @@ void visualisation::heapify(int n, int i)
 	if (largest != i)
 	{
 		std::swap(values[i], values[largest]);
+		assign_operation_count += 2;
 		draw();
 		heapify(n, largest);
 	}
@@ -284,6 +311,7 @@ void visualisation::merge(int left, int mid, int right)
 
 	for (auto i = 0; i < subArrayOne; i++)
 	{
+		leftArray[i] = values[left + i];
 		sf::Event t;
 		while (window.pollEvent(t))
 			if (t.type == sf::Event::Resized)
@@ -291,10 +319,12 @@ void visualisation::merge(int left, int mid, int right)
 				draw();
 				break;
 			}
-		leftArray[i] = values[left + i];
+		assign_operation_count++;
+		draw();
 	}
 	for (auto j = 0; j < subArrayTwo; j++)
 	{
+		rightArray[j] = values[mid + 1 + j];
 		sf::Event t;
 		while (window.pollEvent(t))
 			if (t.type == sf::Event::Resized)
@@ -302,7 +332,8 @@ void visualisation::merge(int left, int mid, int right)
 				draw();
 				break;
 			}
-		rightArray[j] = values[mid + 1 + j];
+		assign_operation_count++;
+		draw();
 	}
 
 	auto indexOfSubArrayOne = 0, indexOfSubArrayTwo = 0;
@@ -317,15 +348,18 @@ void visualisation::merge(int left, int mid, int right)
 				draw();
 				break;
 			}
+		comparision_operation_count++;
 		if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) 
 		{
 			values[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
+			assign_operation_count++;
 			draw();
 			indexOfSubArrayOne++;
 		}
 		else 
 		{
 			values[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
+			assign_operation_count++;
 			draw();
 			indexOfSubArrayTwo++;
 		}
@@ -341,6 +375,7 @@ void visualisation::merge(int left, int mid, int right)
 				break;
 			}
 		values[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
+		assign_operation_count++;
 		draw();
 		indexOfSubArrayOne++;
 		indexOfMergedArray++;
@@ -356,6 +391,7 @@ void visualisation::merge(int left, int mid, int right)
 				break;
 			}
 		values[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
+		assign_operation_count++;
 		draw();
 		indexOfSubArrayTwo++;
 		indexOfMergedArray++;
@@ -394,12 +430,14 @@ void visualisation::comb_sort()
 							draw();
 							break;
 						}
+					comparision_operation_count++;
 					if (values[i] > values[i + gap])
 					{
 						std::swap(values[i], values[i + gap]);
-						draw();
+						assign_operation_count += 2;
 						swapped = true;
 					}
+					draw();
 				}
 			}
 			finished = true;
@@ -428,17 +466,20 @@ void visualisation::shell_sort()
 				for (int i = gap; i < values.size(); i += 1) {
 					int temp = values[i];
 					int j;
-					sf::Event s;
-					while (window.pollEvent(s))
-						if (s.type == sf::Event::Resized) {
-							draw();
-							break;
-						}
 					for (j = i; j >= gap && values[j - gap] > temp; j -= gap) {
 						values[j] = values[j - gap];
+						assign_operation_count++;
+						comparision_operation_count++;
+						sf::Event s;
+						while (window.pollEvent(s))
+							if (s.type == sf::Event::Resized) {
+								draw();
+								break;
+							}
 						draw();
 					}
 					values[j] = temp;
+					comparision_operation_count++;
 					draw();
 				}
 			finished = true;
