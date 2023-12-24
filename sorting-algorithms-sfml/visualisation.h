@@ -2,17 +2,20 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <random>
+#include "state.h"
 class visualisation
 {
 private:
+	state program_state;
 	std::mt19937 generator;
 	static const int window_width = 1000;
 	static const int window_height = 100;
-	sf::Font counter_font;
+	sf::RenderWindow window;
+	std::string current_algorithm_name;
 	std::vector<int> values;
 	sf::Vector2i colors;
 	sf::Vector2i variants;
-	sf::RenderWindow window;
+	sf::Font counter_font;
 	long long assign_operation_count;
 	long long comparision_operation_count;
 public:
@@ -26,6 +29,7 @@ public:
 	void merge_sort();
 	void comb_sort();
 	void shell_sort();
+	void set_state(state);
 private:
 	void quick_sort_in(int low, int high);
 	int partition(int low, int high);

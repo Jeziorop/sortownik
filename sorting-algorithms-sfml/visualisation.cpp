@@ -1,6 +1,7 @@
 #include "visualisation.h"
 #include <algorithm>
 #include <string>
+#include <iostream>
 visualisation::visualisation(std::vector<int> &values)
 {
 	std::random_device rd;
@@ -31,9 +32,10 @@ visualisation::visualisation(int size)
 }
 void visualisation::bubble_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Bubble sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	current_algorithm_name = "Bubble sort";
+	set_state(state::Waiting);
 	window.setFramerateLimit(60);
-	bool finished = false;
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -42,7 +44,7 @@ void visualisation::bubble_sort()
 				draw();
 				break;
 			}
-		if (!finished)
+		if (program_state == state::Running)
 		{
 			for (int i = 0; i < values.size(); i++)
 				for (int j = 1; j < values.size() - i; j++)
@@ -59,7 +61,7 @@ void visualisation::bubble_sort()
 							break;
 					draw();
 				}
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -68,9 +70,10 @@ void visualisation::bubble_sort()
 }
 void visualisation::insertion_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Insertion sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	current_algorithm_name = "Insertion sort";
+	set_state(state::Waiting);
 	window.setFramerateLimit(60);
-	bool finished = false;
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -79,8 +82,10 @@ void visualisation::insertion_sort()
 				draw();
 				break;
 			}
-		if (!finished) {
-			for (int i = 1; i < values.size(); i++) {
+		if (program_state == state::Running) 
+		{
+			for (int i = 1; i < values.size(); i++) 
+			{
 				int key = values[i];
 				int j = i - 1;
 				while (j >= 0 && values[j] > key)
@@ -99,7 +104,7 @@ void visualisation::insertion_sort()
 				assign_operation_count++;
 				draw();
 			}
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -107,9 +112,10 @@ void visualisation::insertion_sort()
 }
 void visualisation::quick_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Quick sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
-	bool finished = false;
+	current_algorithm_name = "Quick sort";
+	set_state(state::Waiting);
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -119,10 +125,10 @@ void visualisation::quick_sort()
 				draw();
 				break;
 			}
-		if (!finished) 
+		if (program_state == state::Running) 
 		{
 			quick_sort_in(0, values.size() - 1);
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -189,10 +195,10 @@ void visualisation::draw()
 }
 void visualisation::heap_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Heap sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
-	window.setPosition(sf::Vector2i(0, 450));
-	bool finished = false;
+	current_algorithm_name = "Heap sort";
+	set_state(state::Waiting);
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -201,16 +207,18 @@ void visualisation::heap_sort()
 				draw();
 				break;
 			}
-		if (!finished) {
+		if (program_state == state::Running)
+		{
 			for (int i = values.size() / 2 - 1; i >= 0; i--)
 				heapify(values.size(), i);
-			for (int i = values.size() - 1; i > 0; i--) {
+			for (int i = values.size() - 1; i > 0; i--) 
+			{
 				std::swap(values[0], values[i]);
 				assign_operation_count += 2;
 				draw();
 				heapify(i, 0);
 			}
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -246,9 +254,10 @@ void visualisation::heapify(int n, int i)
 }
 void visualisation::bogo_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Bogo sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
-	bool finished = false;
+	current_algorithm_name = "Bogo sort";
+	set_state(state::Waiting);
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -257,24 +266,23 @@ void visualisation::bogo_sort()
 				draw();
 				break;
 			}
-		if (!finished)
+		if (program_state == state::Running)
 		{
-			std::random_shuffle(values.begin(), values.end());
-			finished = std::is_sorted(values.begin(), values.end());
+			std::ranges::shuffle(values, generator);
 			assign_operation_count += values.size();
 			comparision_operation_count += values.size() - 1;
+			if (std::is_sorted(values.begin(), values.end()))
+				set_state(state::Finished);
 		}
 		draw();
-		//if (finished)//close)
-			//window.close();
-
 	}
 }
 void visualisation::merge_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Merge sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
-	bool finished = false;
+	current_algorithm_name = "merge sort";
+	set_state(state::Waiting);
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -284,10 +292,11 @@ void visualisation::merge_sort()
 				draw();
 				break;
 			}
-		if (!finished) 
+		
+		if (program_state == state::Running) 
 		{
 			merge_sort_in(0, values.size() - 1);
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -403,9 +412,10 @@ void visualisation::merge(int left, int mid, int right)
 }
 void visualisation::comb_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Comb sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
-	bool finished = false;
+	current_algorithm_name = "Comb sort";
+	set_state(state::Waiting);
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -414,7 +424,7 @@ void visualisation::comb_sort()
 				draw();
 				break;
 			}
-		if (!finished)
+		if (program_state == state::Running)
 		{
 			int gap = values.size();
 			bool swapped = true;
@@ -442,7 +452,7 @@ void visualisation::comb_sort()
 					draw();
 				}
 			}
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -451,9 +461,10 @@ void visualisation::comb_sort()
 }
 void visualisation::shell_sort()
 {
-	window.create(sf::VideoMode(window_width, window_height), "Shell sort", sf::Style::Resize);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
-	bool finished = false;
+	current_algorithm_name = "Shell sort";
+	set_state(state::Waiting);
 	while (window.isOpen())
 	{
 		sf::Event t;
@@ -462,13 +473,15 @@ void visualisation::shell_sort()
 				draw();
 				break;
 			}
-		if (!finished)
+		if (program_state == state::Running)
 		{
 			for (int gap = values.size() / 2; gap > 0; gap /= 2)
-				for (int i = gap; i < values.size(); i += 1) {
+				for (int i = gap; i < values.size(); i += 1) 
+				{
 					int temp = values[i];
 					int j;
-					for (j = i; j >= gap && values[j - gap] > temp; j -= gap) {
+					for (j = i; j >= gap && values[j - gap] > temp; j -= gap) 
+					{
 						values[j] = values[j - gap];
 						assign_operation_count++;
 						comparision_operation_count++;
@@ -484,7 +497,7 @@ void visualisation::shell_sort()
 					comparision_operation_count++;
 					draw();
 				}
-			finished = true;
+			set_state(state::Finished);
 		}
 		else
 			draw();
@@ -508,4 +521,22 @@ int visualisation::rand_int(int min, int maks)
 {
 	std::uniform_int_distribution<int> distribution(min, maks);
 	return distribution(generator);
+}
+void visualisation::set_state(state new_state)
+{
+	program_state = new_state;
+	std::string title = current_algorithm_name;
+	switch (program_state)
+	{
+	case state::Waiting:
+		title.append(" - waiting");
+		break;
+	case state::Running:
+		title.append(" - running");
+		break;
+	case state::Finished:
+		title.append(" - finished");
+	}
+	std::cout << title << '\n';
+	window.setTitle(title);
 }
