@@ -2,10 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <random>
+#include <mutex>
 #include "state.h"
 class visualisation
 {
 private:
+	std::mutex window_access_mutex;
 	state program_state;
 	std::mt19937 generator;
 	static const int window_width = 1000;

@@ -32,6 +32,7 @@ visualisation::visualisation(int size)
 }
 void visualisation::bubble_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	current_algorithm_name = "Bubble sort";
 	set_state(state::Waiting);
@@ -73,6 +74,7 @@ void visualisation::bubble_sort()
 }
 void visualisation::insertion_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	current_algorithm_name = "Insertion sort";
 	set_state(state::Waiting);
@@ -117,6 +119,7 @@ void visualisation::insertion_sort()
 }
 void visualisation::quick_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Quick sort";
@@ -204,6 +207,7 @@ void visualisation::draw()
 }
 void visualisation::heap_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Heap sort";
@@ -265,6 +269,7 @@ void visualisation::heapify(int n, int i)
 }
 void visualisation::bogo_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Bogo sort";
@@ -291,6 +296,7 @@ void visualisation::bogo_sort()
 }
 void visualisation::merge_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Merge sort";
@@ -430,6 +436,7 @@ void visualisation::merge(int left, int mid, int right)
 }
 void visualisation::comb_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Comb sort";
@@ -481,6 +488,7 @@ void visualisation::comb_sort()
 }
 void visualisation::shell_sort()
 {
+	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	window.setFramerateLimit(60);
 	current_algorithm_name = "Shell sort";
