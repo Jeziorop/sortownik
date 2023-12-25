@@ -2,5 +2,6 @@
 enum class state {
     Waiting,
     Running,
-    Finished
+    Finished,
+    Closed
 };

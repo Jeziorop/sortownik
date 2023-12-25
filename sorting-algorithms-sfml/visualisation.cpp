@@ -35,8 +35,8 @@ void visualisation::bubble_sort()
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	current_algorithm_name = "Bubble sort";
 	set_state(state::Waiting);
-	window.setFramerateLimit(60);
-	while (window.isOpen())
+	window.setVerticalSyncEnabled(true);
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -47,7 +47,7 @@ void visualisation::bubble_sort()
 		if (program_state == state::Running)
 		{
 			for (int i = 0; i < values.size(); i++)
-				for (int j = 1; j < values.size() - i; j++)
+				for (int j = 1; j < values.size() - i && program_state != state::Closed; j++)
 				{
 					if (values[j - 1] > values[j])
 					{
@@ -61,20 +61,23 @@ void visualisation::bubble_sort()
 							break;
 					draw();
 				}
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 		
 	}
+	window.close();
+	return;
 }
 void visualisation::insertion_sort()
 {
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
 	current_algorithm_name = "Insertion sort";
 	set_state(state::Waiting);
-	window.setFramerateLimit(60);
-	while (window.isOpen())
+	window.setVerticalSyncEnabled(true);
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -84,11 +87,11 @@ void visualisation::insertion_sort()
 			}
 		if (program_state == state::Running) 
 		{
-			for (int i = 1; i < values.size(); i++) 
+			for (int i = 1; i < values.size() && program_state != state::Closed; i++)
 			{
 				int key = values[i];
 				int j = i - 1;
-				while (j >= 0 && values[j] > key)
+				while (j >= 0 && values[j] > key && program_state != state::Closed)
 				{
 					values[j + 1] = values[j];
 					j = j - 1;
@@ -104,19 +107,21 @@ void visualisation::insertion_sort()
 				assign_operation_count++;
 				draw();
 			}
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 	}
+	window.close();
 }
 void visualisation::quick_sort()
 {
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
-	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Quick sort";
 	set_state(state::Waiting);
-	while (window.isOpen())
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -128,19 +133,23 @@ void visualisation::quick_sort()
 		if (program_state == state::Running) 
 		{
 			quick_sort_in(0, values.size() - 1);
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 	}
+	window.close();
 }
 void visualisation::quick_sort_in(int low, int high)
 {
-	if (low >= high)
+	if (low >= high || program_state == state::Closed)
 		return;
 	int pivot = partition(low, high);
 
 	quick_sort_in(low, pivot - 1);
+	if (program_state == state::Closed)
+		return;
 	quick_sort_in(pivot + 1, high);
 }
 int visualisation::partition(int low, int high)
@@ -148,7 +157,7 @@ int visualisation::partition(int low, int high)
 	int pivotValue = values[high];
 	int i = low - 1;
 
-	for (int j = low; j <= high - 1; j++)
+	for (int j = low; j <= high - 1 && program_state != state::Closed; j++)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -196,10 +205,10 @@ void visualisation::draw()
 void visualisation::heap_sort()
 {
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
-	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Heap sort";
 	set_state(state::Waiting);
-	while (window.isOpen())
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -209,20 +218,22 @@ void visualisation::heap_sort()
 			}
 		if (program_state == state::Running)
 		{
-			for (int i = values.size() / 2 - 1; i >= 0; i--)
+			for (int i = values.size() / 2 - 1; i >= 0 && program_state != state::Closed; i--)
 				heapify(values.size(), i);
-			for (int i = values.size() - 1; i > 0; i--) 
+			for (int i = values.size() - 1; i > 0 && program_state != state::Closed; i--)
 			{
 				std::swap(values[0], values[i]);
 				assign_operation_count += 2;
 				draw();
 				heapify(i, 0);
 			}
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 	}
+	window.close();
 }
 void visualisation::heapify(int n, int i)
 {
@@ -244,7 +255,7 @@ void visualisation::heapify(int n, int i)
 			draw();
 			break;
 		}
-	if (largest != i)
+	if (largest != i && program_state != state::Closed)
 	{
 		std::swap(values[i], values[largest]);
 		assign_operation_count += 2;
@@ -255,10 +266,10 @@ void visualisation::heapify(int n, int i)
 void visualisation::bogo_sort()
 {
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
-	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Bogo sort";
 	set_state(state::Waiting);
-	while (window.isOpen())
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -271,19 +282,20 @@ void visualisation::bogo_sort()
 			std::ranges::shuffle(values, generator);
 			assign_operation_count += values.size();
 			comparision_operation_count += values.size() - 1;
-			if (std::is_sorted(values.begin(), values.end()))
+			if (std::is_sorted(values.begin(), values.end()) && program_state != state::Closed)
 				set_state(state::Finished);
 		}
 		draw();
 	}
+	window.close();
 }
 void visualisation::merge_sort()
 {
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
-	window.setFramerateLimit(60);
-	current_algorithm_name = "merge sort";
+	window.setVerticalSyncEnabled(true);
+	current_algorithm_name = "Merge sort";
 	set_state(state::Waiting);
-	while (window.isOpen())
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -296,20 +308,26 @@ void visualisation::merge_sort()
 		if (program_state == state::Running) 
 		{
 			merge_sort_in(0, values.size() - 1);
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 	}
+	window.close();
 }
 void visualisation::merge_sort_in(int begin, int end)
 {
-	if (begin >= end)
+	if (begin >= end || program_state == state::Closed)
 		return;
 
 	int mid = begin + (end - begin) / 2;
 	merge_sort_in(begin, mid);
+	if (program_state == state::Closed)
+		return;
 	merge_sort_in(mid + 1, end);
+	if (program_state == state::Closed)
+		return;
 	merge(begin, mid, end);
 }
 void visualisation::merge(int left, int mid, int right)
@@ -320,7 +338,7 @@ void visualisation::merge(int left, int mid, int right)
 	auto* leftArray = new int[subArrayOne],
 		* rightArray = new int[subArrayTwo];
 
-	for (auto i = 0; i < subArrayOne; i++)
+	for (auto i = 0; i < subArrayOne && program_state != state::Closed; i++)
 	{
 		leftArray[i] = values[left + i];
 		sf::Event t;
@@ -333,7 +351,7 @@ void visualisation::merge(int left, int mid, int right)
 		assign_operation_count++;
 		draw();
 	}
-	for (auto j = 0; j < subArrayTwo; j++)
+	for (auto j = 0; j < subArrayTwo && program_state != state::Closed; j++)
 	{
 		rightArray[j] = values[mid + 1 + j];
 		sf::Event t;
@@ -350,7 +368,7 @@ void visualisation::merge(int left, int mid, int right)
 	auto indexOfSubArrayOne = 0, indexOfSubArrayTwo = 0;
 	int indexOfMergedArray = left;
 
-	while (indexOfSubArrayOne < subArrayOne && indexOfSubArrayTwo < subArrayTwo) 
+	while (indexOfSubArrayOne < subArrayOne && indexOfSubArrayTwo < subArrayTwo && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -377,7 +395,7 @@ void visualisation::merge(int left, int mid, int right)
 		indexOfMergedArray++;
 	}
 
-	while (indexOfSubArrayOne < subArrayOne) {
+	while (indexOfSubArrayOne < subArrayOne && program_state != state::Closed) {
 		sf::Event t;
 		while (window.pollEvent(t))
 			if (t.type == sf::Event::Resized)
@@ -392,7 +410,7 @@ void visualisation::merge(int left, int mid, int right)
 		indexOfMergedArray++;
 	}
 
-	while (indexOfSubArrayTwo < subArrayTwo) 
+	while (indexOfSubArrayTwo < subArrayTwo && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -413,10 +431,10 @@ void visualisation::merge(int left, int mid, int right)
 void visualisation::comb_sort()
 {
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
-	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Comb sort";
 	set_state(state::Waiting);
-	while (window.isOpen())
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -429,12 +447,12 @@ void visualisation::comb_sort()
 			int gap = values.size();
 			bool swapped = true;
 
-			while (gap != 1 || swapped)
+			while ((gap != 1 || swapped) && program_state != state::Closed)
 			{
 				gap = std::max((gap * 10) / 13, 1);
 
 				swapped = false;
-				for (int i = 0; i < values.size() - gap; i++)
+				for (int i = 0; i < values.size() - gap && program_state != state::Closed; i++)
 				{
 					sf::Event t;
 					while (window.pollEvent(t))
@@ -452,12 +470,14 @@ void visualisation::comb_sort()
 					draw();
 				}
 			}
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 
 	}
+	window.close();
 }
 void visualisation::shell_sort()
 {
@@ -465,7 +485,7 @@ void visualisation::shell_sort()
 	window.setFramerateLimit(60);
 	current_algorithm_name = "Shell sort";
 	set_state(state::Waiting);
-	while (window.isOpen())
+	while (window.isOpen() && program_state != state::Closed)
 	{
 		sf::Event t;
 		while (window.pollEvent(t))
@@ -475,12 +495,12 @@ void visualisation::shell_sort()
 			}
 		if (program_state == state::Running)
 		{
-			for (int gap = values.size() / 2; gap > 0; gap /= 2)
-				for (int i = gap; i < values.size(); i += 1) 
+			for (int gap = values.size() / 2; gap > 0 && program_state != state::Closed; gap /= 2)
+				for (int i = gap; i < values.size() && program_state != state::Closed; i += 1)
 				{
 					int temp = values[i];
 					int j;
-					for (j = i; j >= gap && values[j - gap] > temp; j -= gap) 
+					for (j = i; j >= gap && values[j - gap] > temp && program_state != state::Closed; j -= gap)
 					{
 						values[j] = values[j - gap];
 						assign_operation_count++;
@@ -497,13 +517,14 @@ void visualisation::shell_sort()
 					comparision_operation_count++;
 					draw();
 				}
-			set_state(state::Finished);
+			if(program_state != state::Closed)
+				set_state(state::Finished);
 		}
 		else
 			draw();
 
 	}
-
+	window.close();
 }
 sf::Color visualisation::gradient(int val)
 {
@@ -536,6 +557,9 @@ void visualisation::set_state(state new_state)
 		break;
 	case state::Finished:
 		title.append(" - finished");
+		break;
+	case state::Closed:
+		title.append(" - closed");
 	}
 	std::cout << title << '\n';
 	window.setTitle(title);
