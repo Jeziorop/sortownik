@@ -147,11 +147,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gui.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="text_rectangle.cpp" />
     <ClCompile Include="visualisation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="state.h" />
+    <ClInclude Include="gui.h" />
+    <ClInclude Include="text_rectangle.h" />
+    <ClInclude Include="view_state.h" />
+    <ClInclude Include="visualisation_state.h" />
     <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <ItemGroup>

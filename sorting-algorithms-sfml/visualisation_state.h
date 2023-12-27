@@ -1,5 +1,5 @@
 #pragma once
-enum class state {
+enum class visualisation_state {
     Waiting,
     Running,
     Finished,
