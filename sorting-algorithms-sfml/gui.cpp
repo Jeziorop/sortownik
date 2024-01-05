@@ -2,7 +2,7 @@
 #include <iostream>
 
 gui::gui()
-	: window_height(500), window_width(500), current_state(view_state::Mainview), add_button("Add", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 50.f), 10.f), array_size(0), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort }), create_button("create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f)
+	: window_height(500), window_width(500), current_state(view_state::Mainview), add_button("Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f), array_size(0), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort }), create_button("create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f), chosen(0), run_button("Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f), end_button("End", 20, sf::Color(50, 50, 50), sf::Vector2f(350.f, 400.f), 10.f)
 {
 	font.loadFromFile("res\\Arial.ttf");
 	visualisations_list_header.setString("current visualisations");
@@ -34,27 +34,27 @@ void gui::start()
 }
 void gui::draw()
 {
-	window.clear(sf::Color::Blue);
+	window.clear(sf::Color(60, 60, 60));
 	switch (current_state)
 	{
 	case view_state::Mainview:
 		window.draw(visualisations_list_header);
 		if (visualisations.empty())
 		{
-			text_rectangle empty("(empty)", 20, sf::Color(50, 50, 50), sf::Vector2f(150.f, 80.f), 10.f);
+			text_rectangle empty("(empty)", 20, sf::Color(50, 50, 50), sf::Vector2f(200.f, 120.f), 10.f);
 			window.draw(empty.background);
 			window.draw(empty.text);
 		}
 		else
 		{
 			text_rectangle visualisation_name;
-			for (const auto& ptr : visualisations)
-			{
-				std::cout << std::string(ptr->get_title()) << '\n';
-			}
 		}
 		window.draw(add_button.background);
 		window.draw(add_button.text);
+		window.draw(run_button.background);
+		window.draw(run_button.text);
+		window.draw(end_button.background);
+		window.draw(end_button.text);
 		break;
 
 	case view_state::Createview:
@@ -93,8 +93,17 @@ void gui::handle_events()
 				if (add_button.is_collision(x, y))
 				{
 					current_state = view_state::Createview;
+					array_size_input.setString("No. elements: 100");
 					array_size = 100;
 					chosen = 0;
+				}
+				else if (run_button.is_collision(x, y))
+				{
+					run_visualisations();
+				}
+				else if (end_button.is_collision(x, y))
+				{
+					end_visualisations();
 				}
 				break;
 
@@ -104,6 +113,7 @@ void gui::handle_events()
 					current_state = view_state::Mainview;
 					visualisations.emplace_back(std::make_shared<visualisation>(array_size));
 					running_threads.emplace_back(algorithms_ptr[chosen], visualisations.back());
+					array_size_input.setString("No. elements: 100");
 					array_size = 100;
 					chosen = 0;
 				}

@@ -20,6 +20,8 @@ private:
 	//Mainview components
 	sf::Text visualisations_list_header;
 	text_rectangle add_button;
+	text_rectangle run_button;
+	text_rectangle end_button;
 	//Createview components
 	std::vector<text_rectangle> algorithms_to_choose;
 	int chosen;
