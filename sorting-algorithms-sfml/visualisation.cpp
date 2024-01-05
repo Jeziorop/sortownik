@@ -485,7 +485,6 @@ void visualisation::set_state(visualisation_state new_state)
 	case visualisation_state::Closed:
 		title.append(" - closed");
 	}
-	std::cout << title << '\n';
 	window.setTitle(title);
 }
 void visualisation::handle_events()

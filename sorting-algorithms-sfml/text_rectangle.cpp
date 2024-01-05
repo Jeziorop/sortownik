@@ -1,4 +1,5 @@
 #include "text_rectangle.h"
+#include <iostream>
 extern sf::Font global_font;
 text_rectangle::text_rectangle()
 {
@@ -31,4 +32,14 @@ void text_rectangle::set_text(const sf::String text_string)
 {
     text.setString(text_string);
     background.setSize(sf::Vector2f(text.getLocalBounds().width + 2 * padding + text.getCharacterSize(), text.getLocalBounds().height + 2 * padding + text.getCharacterSize()));
+}
+bool text_rectangle::is_collision(const int& x, const int& y)
+{
+    sf::Vector2f pos = background.getPosition();
+    sf::Vector2f size = background.getSize();
+    float rec_x = pos.x;
+    float rec_y = pos.y;
+    float rec_width = size.x;
+    float rec_height = size.y;
+    return (rec_x <= x && x <= rec_x + rec_width) && (rec_y <= y && y <= rec_y + rec_height);
 }
