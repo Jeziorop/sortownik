@@ -47,7 +47,12 @@ void gui::draw()
 		}
 		else
 		{
-			text_rectangle visualisation_name;
+			for (int i = 0; i < visualisations_list.size(); ++i)
+			{
+				visualisations_list[i].text.setString(visualisations[i]->get_title());
+				window.draw(visualisations_list[i].background);
+				window.draw(visualisations_list[i].text);
+			}
 		}
 		window.draw(add_button.background);
 		window.draw(add_button.text);
@@ -109,14 +114,8 @@ void gui::handle_events()
 
 			case view_state::Createview:
 				if (create_button.is_collision(x, y))
-				{
-					current_state = view_state::Mainview;
-					visualisations.emplace_back(std::make_shared<visualisation>(array_size));
-					running_threads.emplace_back(algorithms_ptr[chosen], visualisations.back());
-					array_size_input.setString("No. elements: 100");
-					array_size = 100;
-					chosen = 0;
-				}
+					create_visualisation();
+
 				for (int i = 0; i < algorithms_to_choose.size(); ++i)
 					if (algorithms_to_choose[i].is_collision(x, y))
 					{
@@ -161,4 +160,16 @@ void gui::end_visualisations()
 		thread.join();
 	visualisations.clear();
 	running_threads.clear();
+	visualisations_list.clear();
+}
+void gui::create_visualisation()
+{
+	current_state = view_state::Mainview;
+	visualisations.emplace_back(std::make_shared<visualisation>(array_size));
+	running_threads.emplace_back(algorithms_ptr[chosen], visualisations.back());
+	array_size_input.setString("No. elements: 100");
+	visualisations_list.emplace_back("", 20, sf::Color(50, 50, 50), sf::Vector2f(135.f, 100.f + 60.f * visualisations_list.size()), 10.f);
+	visualisations_list.back().background.setSize(sf::Vector2f(230.f, 50.f));
+	array_size = 100;
+	chosen = 0;
 }

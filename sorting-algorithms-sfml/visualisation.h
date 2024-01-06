@@ -13,7 +13,7 @@ private:
 	static const int window_width = 1000;
 	static const int window_height = 100;
 	sf::RenderWindow window;
-	sf::String title;
+	std::string title;
 	sf::String current_algorithm_name;
 	std::vector<int> values;
 	sf::Vector2i colors;
@@ -33,7 +33,7 @@ public:
 	void comb_sort();
 	void shell_sort();
 	void set_state(visualisation_state);
-	sf::String get_title();
+	std::string get_title();
 private:
 	void quick_sort_in(int low, int high);
 	int partition(int low, int high);

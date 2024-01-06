@@ -470,7 +470,7 @@ int visualisation::rand_int(int min, int maks)
 void visualisation::set_state(visualisation_state new_state)
 {
 	program_state = new_state;
-	std::string title = current_algorithm_name;
+	title = current_algorithm_name;
 	switch (program_state)
 	{
 	case visualisation_state::Waiting:
@@ -496,7 +496,7 @@ void visualisation::handle_events()
 			break;
 		}
 }
-sf::String visualisation::get_title()
+std::string visualisation::get_title()
 {
 	return title;
 }

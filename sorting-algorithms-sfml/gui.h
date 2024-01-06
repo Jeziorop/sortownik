@@ -19,6 +19,7 @@ private:
 	sf::Font font;
 	//Mainview components
 	sf::Text visualisations_list_header;
+	std::vector<text_rectangle> visualisations_list;
 	text_rectangle add_button;
 	text_rectangle run_button;
 	text_rectangle end_button;
@@ -35,5 +36,6 @@ public:
 	void end_visualisations();
 	void handle_events();
 	void draw();
+	void create_visualisation();
 };
 

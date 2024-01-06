@@ -7,7 +7,7 @@
 #include <thread>
 #include <chrono>
 sf::Font global_font;
-int main()
+int WinMain()
 {
     global_font.loadFromFile("res//Arial.ttf");
     gui GUI;
