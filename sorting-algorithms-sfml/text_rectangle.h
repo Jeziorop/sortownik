@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 struct text_rectangle
 {
-    sf::Font font;
     sf::RectangleShape background;
     sf::Text text;
     float padding;

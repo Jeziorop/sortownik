@@ -2,10 +2,11 @@
 #include <algorithm>
 #include <string>
 #include <iostream>
-visualisation::visualisation(std::vector<int> &values)
+extern sf::Font global_font;
+extern std::mt19937 generator;
+extern int rand_int(int min, int max);
+visualisation::visualisation(std::vector<int> &values, sf::Vector2i pos)
 {
-	std::random_device rd;
-	generator.seed(rd());
 	this->values = values;
 	colors.x = rand_int(0, 255);
 	colors.y = rand_int(0, 255);
@@ -13,9 +14,10 @@ visualisation::visualisation(std::vector<int> &values)
 	variants.y = rand_int(0, 1);
 	assign_operation_count = 0;
 	comparision_operation_count = 0;
-	counter_font.loadFromFile("res\\Arial.ttf");
+	program_state = visualisation_state::Waiting;
+	window_position = pos;
 }
-visualisation::visualisation(int size)
+visualisation::visualisation(int size, sf::Vector2i pos)
 {
 	std::random_device rd;
 	generator.seed(rd());
@@ -28,12 +30,14 @@ visualisation::visualisation(int size)
 	variants.y = rand_int(0, 1);
 	assign_operation_count = 0;
 	comparision_operation_count = 0;
-	counter_font.loadFromFile("res\\Arial.ttf");
+	program_state = visualisation_state::Waiting;
+	window_position = pos;
 }
 void visualisation::bubble_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	current_algorithm_name = "Bubble sort";
 	set_state(visualisation_state::Waiting);
 	window.setVerticalSyncEnabled(true);
@@ -71,6 +75,7 @@ void visualisation::insertion_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	current_algorithm_name = "Insertion sort";
 	set_state(visualisation_state::Waiting);
 	window.setVerticalSyncEnabled(true);
@@ -111,6 +116,7 @@ void visualisation::quick_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Quick sort";
 	set_state(visualisation_state::Waiting);
@@ -176,7 +182,7 @@ void visualisation::draw()
 		temp_rect.setPosition(sf::Vector2f((i + 1) * rect_width, window_height));
 		window.draw(temp_rect);
 	}
-	sf::Text counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), counter_font, 15);
+	sf::Text counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), global_font, 15);
 	counter.setFillColor(sf::Color::White);
 	counter.setOutlineThickness(1.f);
 	counter.setScale(sf::Vector2f(float(window_width) / window.getSize().x, float(window_height) / window.getSize().y));//prevent squeezing
@@ -187,6 +193,7 @@ void visualisation::heap_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Heap sort";
 	set_state(visualisation_state::Waiting);
@@ -244,6 +251,7 @@ void visualisation::bogo_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Bogo sort";
 	set_state(visualisation_state::Waiting);
@@ -266,6 +274,7 @@ void visualisation::merge_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Merge sort";
 	set_state(visualisation_state::Waiting);
@@ -369,6 +378,7 @@ void visualisation::comb_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	window.setVerticalSyncEnabled(true);
 	current_algorithm_name = "Comb sort";
 	set_state(visualisation_state::Waiting);
@@ -411,6 +421,7 @@ void visualisation::shell_sort()
 {
 	std::lock_guard<std::mutex> lock(window_access_mutex);
 	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
 	window.setFramerateLimit(60);
 	current_algorithm_name = "Shell sort";
 	set_state(visualisation_state::Waiting);
@@ -462,13 +473,10 @@ sf::Color visualisation::gradient(int val)
 	else
 		return sf::Color(colors.x, colors.y, val);
 }
-int visualisation::rand_int(int min, int maks)
-{
-	std::uniform_int_distribution<int> distribution(min, maks);
-	return distribution(generator);
-}
 void visualisation::set_state(visualisation_state new_state)
 {
+	if (new_state == visualisation_state::Running && program_state != visualisation_state::Waiting)
+		return;
 	program_state = new_state;
 	title = current_algorithm_name;
 	switch (program_state)
@@ -499,4 +507,8 @@ void visualisation::handle_events()
 std::string visualisation::get_title()
 {
 	return title;
+}
+void visualisation::set_position(sf::Vector2i pos)
+{
+	window.setPosition(pos);
 }
