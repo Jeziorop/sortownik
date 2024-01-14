@@ -20,6 +20,7 @@ private:
 	sf::Vector2i variants;
 	long long assign_operation_count;
 	long long comparision_operation_count;
+	sf::Text counter;
 public:
 	visualisation(const std::vector<int>& values, sf::Vector2i pos);
 	visualisation(int size, sf::Vector2i pos);

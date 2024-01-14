@@ -5,6 +5,7 @@ extern sf::Font* global_font;
 extern std::mt19937 generator;
 extern int rand_int(int min, int max);
 visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
+	: counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
 {
 	this->values = values;
 	colors.x = rand_int(0, 255);
@@ -15,8 +16,11 @@ visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
 	comparision_operation_count = 0;
 	program_state = visualisation_state::Waiting;
 	window_position = pos;
+	counter.setFillColor(sf::Color::White);
+	counter.setOutlineThickness(1.f);
 }
 visualisation::visualisation(int size, sf::Vector2i pos)
+	: counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
 {
 	std::random_device rd;
 	generator.seed(rd());
@@ -31,6 +35,8 @@ visualisation::visualisation(int size, sf::Vector2i pos)
 	comparision_operation_count = 0;
 	program_state = visualisation_state::Waiting;
 	window_position = pos;
+	counter.setFillColor(sf::Color::White);
+	counter.setOutlineThickness(1.f);
 }
 void visualisation::bubble_sort()
 {
@@ -181,9 +187,7 @@ void visualisation::draw()
 		temp_rect.setPosition(sf::Vector2f((i + 1) * rect_width, window_height));
 		window.draw(temp_rect);
 	}
-	sf::Text counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15);
-	counter.setFillColor(sf::Color::White);
-	counter.setOutlineThickness(1.f);
+	counter.setString("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count));
 	counter.setScale(sf::Vector2f(float(window_width) / window.getSize().x, float(window_height) / window.getSize().y));//prevent squeezing
 	window.draw(counter);
 	window.display();
