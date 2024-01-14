@@ -1,9 +1,9 @@
 #include "text_rectangle.h"
-extern sf::Font global_font;
+extern sf::Font* global_font;
 text_rectangle::text_rectangle()
 {
     padding = 10.f;
-    text.setFont(global_font);
+    text.setFont(*global_font);
     text.setCharacterSize(15);
     text.setString("");
     background.setFillColor(sf::Color(50, 50, 50));
@@ -12,7 +12,7 @@ text_rectangle::text_rectangle()
 text_rectangle::text_rectangle(const sf::String text_string = "", unsigned int character_size = 10, const sf::Color bg_color = sf::Color::Black, const sf::Vector2f position = sf::Vector2f(0.f, 0.f), float const padding = 10.f)
 {
     this->padding = padding;
-    text = sf::Text(text_string, global_font, character_size);
+    text = sf::Text(text_string, *global_font, character_size);
     float textX = position.x + padding;
     float textY = position.y + padding;
     background.setSize(sf::Vector2f(text.getLocalBounds().width + 2 * padding, text.getLocalBounds().height + padding + text.getCharacterSize()));//approximately centered

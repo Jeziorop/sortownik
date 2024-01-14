@@ -21,7 +21,7 @@ private:
 	long long assign_operation_count;
 	long long comparision_operation_count;
 public:
-	visualisation(std::vector<int>& values, sf::Vector2i);
+	visualisation(const std::vector<int>& values, sf::Vector2i pos);
 	visualisation(int size, sf::Vector2i pos);
 	void bubble_sort();
 	void insertion_sort();

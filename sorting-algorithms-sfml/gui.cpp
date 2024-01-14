@@ -1,5 +1,5 @@
 #include "gui.h"
-extern sf::Font global_font;
+extern sf::Font* global_font;
 gui::gui()
 	: window_height(500), window_width(500), current_state(view_state::Mainview), add_button("Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f), array_size(0), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort }), create_button("create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f), chosen(0), run_button("Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f), end_button("End", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 400.f), 10.f)
 {
@@ -7,12 +7,12 @@ gui::gui()
 	visualisations_list_header.setCharacterSize(30);
 	visualisations_list_header.setPosition(100.f, 50.f);
 	visualisations_list_header.setFillColor(sf::Color::White);
-	visualisations_list_header.setFont(global_font);
+	visualisations_list_header.setFont(*global_font);
 	array_size_input.setString("No. elements: 100");
 	array_size_input.setCharacterSize(20);
 	array_size_input.setPosition(250.f, 120.f);
 	array_size_input.setFillColor(sf::Color::White);
-	array_size_input.setFont(global_font);
+	array_size_input.setFont(*global_font);
 	std::vector<std::string> algorithms_names = { "Bubble sort", "Insertion sort", "Quick sort", "Heap sort", "Bogo sort", "Merge sort", "Comb sort", "Shell sort" };
 	for (int i = 0; i < algorithms_names.size(); ++i)
 	{
