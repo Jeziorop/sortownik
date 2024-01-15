@@ -1,7 +1,7 @@
 #include "gui.h"
 extern sf::Font* global_font;
 gui::gui()
-	: window_height(500), window_width(500), current_state(view_state::Mainview), add_button("Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f), array_size(0), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort }), create_button("create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f), chosen(0), run_button("Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f), end_button("End", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 400.f), 10.f)
+	: window_height(500), window_width(500), current_state(view_state::Mainview), add_button("Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f), array_size(0), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort, &visualisation::dumb_sort }), create_button("create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f), chosen(0), run_button("Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f), end_button("End", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 400.f), 10.f)
 {
 	visualisations_list_header.setString("current visualisations");
 	visualisations_list_header.setCharacterSize(30);
@@ -13,10 +13,10 @@ gui::gui()
 	array_size_input.setPosition(250.f, 120.f);
 	array_size_input.setFillColor(sf::Color::White);
 	array_size_input.setFont(*global_font);
-	std::vector<std::string> algorithms_names = { "Bubble sort", "Insertion sort", "Quick sort", "Heap sort", "Bogo sort", "Merge sort", "Comb sort", "Shell sort" };
+	std::vector<std::string> algorithms_names = { "Bubble sort", "Insertion sort", "Quick sort", "Heap sort", "Bogo sort", "Merge sort", "Comb sort", "Shell sort", "Dumb sort"};
 	for (int i = 0; i < algorithms_names.size(); ++i)
 	{
-		text_rectangle option(algorithms_names[i], 15, sf::Color(50, 50, 50), sf::Vector2f(30, 50 + 50 * i), 10.f);
+		text_rectangle option(algorithms_names[i], 15, sf::Color(50, 50, 50), sf::Vector2f(30, 30 + 50 * i), 10.f);
 		option.background.setSize(sf::Vector2f(120, 40));
 		algorithms_to_choose.emplace_back(option);
 	}
@@ -105,6 +105,8 @@ void gui::handle_events()
 							run_visualisations(i);
 						else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 							end_visualisations(i);
+						else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+							visualisations[i]->roll_colors();
 					}
 				if (add_button.is_collision(x, y) && visualisations.size() < 5)
 				{

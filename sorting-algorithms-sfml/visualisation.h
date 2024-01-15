@@ -32,9 +32,11 @@ public:
 	void merge_sort();
 	void comb_sort();
 	void shell_sort();
+	void dumb_sort();
 	void set_state(visualisation_state);
 	std::string get_title();
 	void set_position(sf::Vector2i pos);
+	void roll_colors();
 private:
 	void quick_sort_in(int low, int high);
 	int partition(int low, int high);

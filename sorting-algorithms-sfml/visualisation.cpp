@@ -464,6 +464,45 @@ void visualisation::shell_sort()
 	}
 	window.close();
 }
+void visualisation::dumb_sort()
+{
+	std::lock_guard<std::mutex> lock(window_access_mutex);
+	window.create(sf::VideoMode(window_width, window_height), "", sf::Style::Resize);
+	window.setPosition(window_position);
+	current_algorithm_name = "Dumb sort";
+	set_state(visualisation_state::Waiting);
+	window.setVerticalSyncEnabled(true);
+	while (window.isOpen() && program_state != visualisation_state::Closed)
+	{
+		handle_events();
+		if (program_state == visualisation_state::Running)
+		{
+			int i = 0;
+			do
+			{
+				handle_events();
+				comparision_operation_count++;
+				draw();
+				if (values[i] > values[i + 1]) // Porz¹dek rosn¹cy
+				{
+					std::swap(values [i] , values[i + 1]);
+					assign_operation_count += 2;
+					draw();
+					i = 0;
+					continue;
+				}
+				i++;
+			} while (i < values.size() - 1 && program_state == visualisation_state::Running);
+			if (program_state != visualisation_state::Closed)
+				set_state(visualisation_state::Finished);
+		}
+		else
+			draw();
+
+	}
+	window.close();
+	return;
+}
 sf::Color visualisation::gradient(int val)
 {
 	if (variants.y == 1)
@@ -514,4 +553,11 @@ std::string visualisation::get_title()
 void visualisation::set_position(sf::Vector2i pos)
 {
 	window.setPosition(pos);
+}
+void visualisation::roll_colors()
+{
+	colors.x = rand_int(0, 255);
+	colors.y = rand_int(0, 255);
+	variants.x = rand_int(0, 2);
+	variants.y = rand_int(0, 1);
 }
