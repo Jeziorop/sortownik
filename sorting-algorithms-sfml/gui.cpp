@@ -13,7 +13,7 @@ gui::gui()
 	array_size_input.setPosition(250.f, 120.f);
 	array_size_input.setFillColor(sf::Color::White);
 	array_size_input.setFont(*global_font);
-	std::vector<std::string> algorithms_names = { "Bubble sort", "Insertion sort", "Quick sort", "Heap sort", "Bogo sort", "Merge sort", "Comb sort", "Shell sort", "Dumb sort"};
+	std::vector<std::string> algorithms_names = { "Bubble sort", "Insertion sort", "Quick sort", "Heap sort", "Bogo sort", "Merge sort", "Comb sort", "Shell sort", "Dumb sort" };
 	for (int i = 0; i < algorithms_names.size(); ++i)
 	{
 		text_rectangle option(algorithms_names[i], 15, sf::Color(50, 50, 50), sf::Vector2f(30, 30 + 50 * i), 10.f);
@@ -27,7 +27,7 @@ void gui::start()
 	while (window.isOpen())
 	{
 		handle_events();
-		if(window.isOpen())
+		if (window.isOpen())
 			draw();
 	}
 }

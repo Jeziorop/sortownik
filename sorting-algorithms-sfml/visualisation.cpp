@@ -5,7 +5,7 @@ extern sf::Font* global_font;
 extern std::mt19937 generator;
 extern int rand_int(int min, int max);
 visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
-	: counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
+	: counter("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
 {
 	this->values = values;
 	colors.x = rand_int(0, 255);
@@ -20,7 +20,7 @@ visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
 	counter.setOutlineThickness(1.f);
 }
 visualisation::visualisation(int size, sf::Vector2i pos)
-	: counter("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
+	: counter("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
 {
 	std::random_device rd;
 	generator.seed(rd());
@@ -66,12 +66,12 @@ void visualisation::bubble_sort()
 							break;
 					draw();
 				}
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
 			draw();
-		
+
 	}
 	window.close();
 	return;
@@ -87,7 +87,7 @@ void visualisation::insertion_sort()
 	while (window.isOpen() && program_state != visualisation_state::Closed)
 	{
 		handle_events();
-		if (program_state == visualisation_state::Running) 
+		if (program_state == visualisation_state::Running)
 		{
 			for (int i = 1; i < values.size() && program_state != visualisation_state::Closed; i++)
 			{
@@ -109,7 +109,7 @@ void visualisation::insertion_sort()
 				assign_operation_count++;
 				draw();
 			}
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
@@ -128,10 +128,10 @@ void visualisation::quick_sort()
 	while (window.isOpen() && program_state != visualisation_state::Closed)
 	{
 		handle_events();
-		if (program_state == visualisation_state::Running) 
+		if (program_state == visualisation_state::Running)
 		{
 			quick_sort_in(0, values.size() - 1);
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
@@ -187,7 +187,7 @@ void visualisation::draw()
 		temp_rect.setPosition(sf::Vector2f((i + 1) * rect_width, window_height));
 		window.draw(temp_rect);
 	}
-	counter.setString("assigns: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count));
+	counter.setString("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count));
 	counter.setScale(sf::Vector2f(float(window_width) / window.getSize().x, float(window_height) / window.getSize().y));//prevent squeezing
 	window.draw(counter);
 	window.display();
@@ -214,7 +214,7 @@ void visualisation::heap_sort()
 				draw();
 				heapify(i, 0);
 			}
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
@@ -284,10 +284,10 @@ void visualisation::merge_sort()
 	while (window.isOpen() && program_state != visualisation_state::Closed)
 	{
 		handle_events();
-		if (program_state == visualisation_state::Running) 
+		if (program_state == visualisation_state::Running)
 		{
 			merge_sort_in(0, values.size() - 1);
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
@@ -339,14 +339,14 @@ void visualisation::merge(int left, int mid, int right)
 	{
 		handle_events();
 		comparision_operation_count++;
-		if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) 
+		if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo])
 		{
 			values[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
 			assign_operation_count++;
 			draw();
 			indexOfSubArrayOne++;
 		}
-		else 
+		else
 		{
 			values[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
 			assign_operation_count++;
@@ -411,7 +411,7 @@ void visualisation::comb_sort()
 					draw();
 				}
 			}
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
@@ -455,7 +455,7 @@ void visualisation::shell_sort()
 					comparision_operation_count++;
 					draw();
 				}
-			if(program_state != visualisation_state::Closed)
+			if (program_state != visualisation_state::Closed)
 				set_state(visualisation_state::Finished);
 		}
 		else
@@ -485,7 +485,7 @@ void visualisation::dumb_sort()
 				draw();
 				if (values[i] > values[i + 1]) // Porz¹dek rosn¹cy
 				{
-					std::swap(values [i] , values[i + 1]);
+					std::swap(values[i], values[i + 1]);
 					assign_operation_count += 2;
 					draw();
 					i = 0;
