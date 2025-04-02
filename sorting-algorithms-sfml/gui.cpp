@@ -1,26 +1,37 @@
 #include "gui.h"
-extern sf::Font* global_font;
 gui::gui()
-	: window_height(500), window_width(500), current_state(view_state::Mainview), add_button("Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f), array_size(0), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort, &visualisation::dumb_sort }), create_button("create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f), chosen(0), run_button("Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f), end_button("End", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 400.f), 10.f)
+	: window_height(500.f), window_width(500.f), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort, &visualisation::dumb_sort })
 {
+	current_state = view_state::Mainview;
+	array_size = 0;
+	chosen = 0;
+	gui_font.loadFromFile("res//Arial.ttf");
+	add_button = text_rectangle(&gui_font, "Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f);
+	create_button = text_rectangle(&gui_font, "create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f);
+	run_button = text_rectangle(&gui_font, "Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f);
+	end_button = text_rectangle(&gui_font, "End", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 400.f), 10.f);
 	visualisations_list_header.setString("current visualisations");
 	visualisations_list_header.setCharacterSize(30);
 	visualisations_list_header.setPosition(100.f, 50.f);
 	visualisations_list_header.setFillColor(sf::Color::White);
-	visualisations_list_header.setFont(*global_font);
+	visualisations_list_header.setFont(gui_font);
 	array_size_input.setString("No. elements: 100");
 	array_size_input.setCharacterSize(20);
 	array_size_input.setPosition(250.f, 120.f);
 	array_size_input.setFillColor(sf::Color::White);
-	array_size_input.setFont(*global_font);
+	array_size_input.setFont(gui_font);
 	std::vector<std::string> algorithms_names = { "Bubble sort", "Insertion sort", "Quick sort", "Heap sort", "Bogo sort", "Merge sort", "Comb sort", "Shell sort", "Dumb sort" };
 	for (int i = 0; i < algorithms_names.size(); ++i)
 	{
-		text_rectangle option(algorithms_names[i], 15, sf::Color(50, 50, 50), sf::Vector2f(30, 30 + 50 * i), 10.f);
+		text_rectangle option(&gui_font, algorithms_names[i], 15, sf::Color(50, 50, 50), sf::Vector2f(30, 30 + 50 * i), 10.f);
 		option.background.setSize(sf::Vector2f(120, 40));
 		algorithms_to_choose.emplace_back(option);
 	}
 }
+//gui::~gui()
+//{
+//
+//}
 void gui::start()
 {
 	window.create(sf::VideoMode(window_width, window_height), "Menu", sf::Style::Close);
@@ -40,7 +51,7 @@ void gui::draw()
 		window.draw(visualisations_list_header);
 		if (visualisations.empty())
 		{
-			text_rectangle empty("(empty)", 20, sf::Color(50, 50, 50), sf::Vector2f(200.f, 100.f), 10.f);
+			text_rectangle empty(&gui_font, "(empty)", 20, sf::Color(50, 50, 50), sf::Vector2f(200.f, 100.f), 10.f);
 			window.draw(empty.background);
 			window.draw(empty.text);
 		}
@@ -201,7 +212,7 @@ void gui::create_visualisation()
 	visualisations.emplace_back(std::make_shared<visualisation>(array_size, sf::Vector2i(0, 137 * visualisations.size())));
 	running_threads.emplace_back(algorithms_ptr[chosen], visualisations.back());
 	array_size_input.setString("No. elements: 100");
-	visualisations_list.emplace_back("", 20, sf::Color(50, 50, 50), sf::Vector2f(135.f, 100.f + 60.f * visualisations_list.size()), 10.f);
+	visualisations_list.emplace_back(&gui_font, "", 20, sf::Color(50, 50, 50), sf::Vector2f(135.f, 100.f + 60.f * visualisations_list.size()), 10.f);
 	visualisations_list.back().background.setSize(sf::Vector2f(230.f, 50.f));
 	array_size = 100;
 	chosen = 0;

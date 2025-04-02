@@ -8,6 +8,7 @@
 class gui
 {
 private:
+	sf::Font gui_font;
 	const float window_width;
 	const float window_height;
 	sf::RenderWindow window;
@@ -29,6 +30,7 @@ private:
 	text_rectangle create_button;
 public:
 	gui();
+	//~gui();
 	void start();
 	void run_visualisations();
 	void run_visualisations(unsigned int id);

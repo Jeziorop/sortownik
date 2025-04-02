@@ -7,6 +7,7 @@
 class visualisation
 {
 private:
+	sf::Font visualisation_font;
 	std::mutex window_access_mutex;
 	visualisation_state program_state;
 	static const int window_width = 1000;

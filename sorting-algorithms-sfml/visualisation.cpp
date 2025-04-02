@@ -1,12 +1,12 @@
 #include "visualisation.h"
 #include <algorithm>
 #include <string>
-extern sf::Font* global_font;
 extern std::mt19937 generator;
 extern int rand_int(int min, int max);
 visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
-	: counter("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
 {
+	visualisation_font.loadFromFile("res//Arial.ttf");
+	counter = sf::Text("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), visualisation_font, 15);
 	this->values = values;
 	colors.x = rand_int(0, 255);
 	colors.y = rand_int(0, 255);
@@ -20,8 +20,9 @@ visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
 	counter.setOutlineThickness(1.f);
 }
 visualisation::visualisation(int size, sf::Vector2i pos)
-	: counter("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), *global_font, 15)
 {
+	visualisation_font.loadFromFile("res//Arial.ttf");
+	counter = sf::Text("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), visualisation_font, 15);
 	std::random_device rd;
 	generator.seed(rd());
 	values.resize(size);
