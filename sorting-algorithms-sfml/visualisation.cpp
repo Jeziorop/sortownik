@@ -1,11 +1,14 @@
 #include "visualisation.h"
 #include <algorithm>
 #include <string>
+#include <iostream>
 extern std::mt19937 generator;
 extern int rand_int(int min, int max);
 visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
 {
-	visualisation_font.loadFromFile("res//Arial.ttf");
+	if (!visualisation_font.loadFromFile("res//Arial.ttf")) {
+		std::cerr << "Error: Font failed to load!" << std::endl;
+	}
 	counter = sf::Text("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), visualisation_font, 15);
 	this->values = values;
 	colors.x = rand_int(0, 255);
@@ -21,7 +24,9 @@ visualisation::visualisation(const std::vector<int>& values, sf::Vector2i pos)
 }
 visualisation::visualisation(int size, sf::Vector2i pos)
 {
-	visualisation_font.loadFromFile("res//Arial.ttf");
+	if (!visualisation_font.loadFromFile("res//Arial.ttf")) {
+		std::cerr << "Error: Font failed to load!" << std::endl;
+	}
 	counter = sf::Text("assignments: " + std::to_string(assign_operation_count) + "\ncomparisions: " + std::to_string(comparision_operation_count), visualisation_font, 15);
 	std::random_device rd;
 	generator.seed(rd());

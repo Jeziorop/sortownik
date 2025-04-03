@@ -3,7 +3,7 @@ text_rectangle::text_rectangle()
 {
     padding = 10.f;
     sf::Font font;
-    font.loadFromFile("");
+    font.loadFromFile("res//Arial.ttf");
     text.setFont(font);
     text.setCharacterSize(15);
     text.setString("");

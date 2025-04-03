@@ -1,11 +1,14 @@
 #include "gui.h"
+#include <iostream>
 gui::gui()
 	: window_height(500.f), window_width(500.f), algorithms_ptr({ &visualisation::bubble_sort, &visualisation::insertion_sort, &visualisation::quick_sort, &visualisation::heap_sort, &visualisation::bogo_sort, &visualisation::merge_sort, &visualisation::comb_sort, &visualisation::shell_sort, &visualisation::dumb_sort })
 {
 	current_state = view_state::Mainview;
 	array_size = 0;
 	chosen = 0;
-	gui_font.loadFromFile("res//Arial.ttf");
+	if (!gui_font.loadFromFile("res//Arial.ttf")) {
+		std::cerr << "Error: Font failed to load!" << std::endl;
+	}
 	add_button = text_rectangle(&gui_font, "Add", 20, sf::Color(50, 50, 50), sf::Vector2f(400.f, 48.f), 10.f);
 	create_button = text_rectangle(&gui_font, "create", 20, sf::Color(50, 50, 50), sf::Vector2f(300.f, 300.f), 10.f);
 	run_button = text_rectangle(&gui_font, "Run", 20, sf::Color(50, 50, 50), sf::Vector2f(50.f, 400.f), 10.f);
@@ -28,11 +31,30 @@ gui::gui()
 		algorithms_to_choose.emplace_back(option);
 	}
 }
-//gui::~gui()
-//{
-//
-//}
-void gui::start()
+gui::~gui() {
+	std::cout << "Destroying GUI..." << std::endl;
+
+	// Close SFML window explicitly
+	if (window.isOpen()) {
+		window.close();
+	}
+
+	// Join threads properly
+	for (auto& thread : running_threads) {
+		if (thread.joinable()) {
+			std::cout << "Joining thread..." << std::endl;
+			thread.join();
+		}
+	}
+
+	// Clear SFML text objects
+	visualisations_list.clear();
+	visualisations.clear();
+
+	std::cout << "GUI destroyed successfully." << std::endl;
+}
+
+void gui::run()
 {
 	window.create(sf::VideoMode(window_width, window_height), "Menu", sf::Style::Close);
 	while (window.isOpen())
@@ -133,7 +155,7 @@ void gui::handle_events()
 				break;
 
 			case view_state::Createview:
-				if (create_button.is_collision(x, y))
+				if (create_button.is_collision(x, y) && array_size > 0)
 					create_visualisation();
 
 				for (int i = 0; i < algorithms_to_choose.size(); ++i)
