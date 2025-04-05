@@ -11,10 +11,8 @@ int WinMain()
     std::random_device rd;
     generator.seed(rd());
 
-    {
-        gui GUI;
-        GUI.start();
-    }
+    gui GUI;
+    GUI.run();
 
     return 0;
 }

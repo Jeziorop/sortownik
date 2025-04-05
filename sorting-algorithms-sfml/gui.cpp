@@ -31,27 +31,13 @@ gui::gui()
 		algorithms_to_choose.emplace_back(option);
 	}
 }
-gui::~gui() {
-	std::cout << "Destroying GUI..." << std::endl;
 
-	// Close SFML window explicitly
+gui::~gui() 
+{
+	end_visualisations();
 	if (window.isOpen()) {
 		window.close();
 	}
-
-	// Join threads properly
-	for (auto& thread : running_threads) {
-		if (thread.joinable()) {
-			std::cout << "Joining thread..." << std::endl;
-			thread.join();
-		}
-	}
-
-	// Clear SFML text objects
-	visualisations_list.clear();
-	visualisations.clear();
-
-	std::cout << "GUI destroyed successfully." << std::endl;
 }
 
 void gui::run()
@@ -156,8 +142,10 @@ void gui::handle_events()
 
 			case view_state::Createview:
 				if (create_button.is_collision(x, y) && array_size > 0)
+				{
+					current_state = view_state::Mainview;
 					create_visualisation();
-
+				}
 				for (int i = 0; i < algorithms_to_choose.size(); ++i)
 					if (algorithms_to_choose[i].is_collision(x, y))
 					{
@@ -230,7 +218,6 @@ void gui::end_visualisations(unsigned int id)
 }
 void gui::create_visualisation()
 {
-	current_state = view_state::Mainview;
 	visualisations.emplace_back(std::make_shared<visualisation>(array_size, sf::Vector2i(0, 137 * visualisations.size())));
 	running_threads.emplace_back(algorithms_ptr[chosen], visualisations.back());
 	array_size_input.setString("No. elements: 100");
